@@ -2,17 +2,18 @@ import asyncpg
 from dotenv import load_dotenv
 import os
 
-load_dotenv('.env.deployment.data')
+if os.getenv('CI') is None:
+    load_dotenv('.env.deployment')
 
-user_pool = None
+user_pool : asyncpg.Pool = None
 
 async def init_user_pool():
 
-    host = os.getenv('DATA_DB_HOST')
-    port = os.getenv('DATA_DB_PORT')
-    database = os.getenv('DATA_DB_NAME')
-    user = os.getenv('DATA_DB_USER')
-    password = os.getenv('DATA_DB_PASSWORD')
+    host = os.getenv('USER_DB_HOST')
+    port = os.getenv('USER_DB_PORT')
+    database = os.getenv('USER_DB_NAME')
+    user = os.getenv('USER_DB_USER')
+    password = os.getenv('USER_DB_PASSWORD')
 
     global user_pool
     if user_pool is None:
@@ -24,3 +25,9 @@ async def init_user_pool():
             password=password,
         ) as pool:
             user_pool = pool
+
+async def close_user_pool():
+    global user_pool
+    if user_pool is not None:
+        await user_pool.close()
+        user_pool = None

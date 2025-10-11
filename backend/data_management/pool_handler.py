@@ -2,9 +2,10 @@ import asyncpg
 from dotenv import load_dotenv
 import os
 
-load_dotenv('.env.deployment.data')
+if os.getenv('CI') is None:
+    load_dotenv('.env.deployment')
 
-data_pool = None
+data_pool : asyncpg.Pool = None
 
 async def init_data_pool():
 
@@ -24,3 +25,9 @@ async def init_data_pool():
             password=password,
         ) as pool:
             data_pool = pool
+
+async def close_data_pool():
+    global data_pool
+    if data_pool is not None:
+        await data_pool.close()
+        data_pool = None
