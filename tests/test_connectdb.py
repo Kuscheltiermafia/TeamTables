@@ -17,10 +17,10 @@ async def db_connect():
     if os.getenv('CI') is None:
         load_dotenv('.env.test')
 
-    user = os.getenv('POSTGRES_USER')
-    password = os.getenv('POSTGRES_PASSWORD')
+    user = os.getenv('DB_USER')
+    password = os.getenv('DB_PASSWORD')
 
-    con = await asyncpg.connect(host='localhost', port=5432, database='testdb')
+    con = await asyncpg.connect(host='localhost', port=5432, database='testdb', user=user, password=password)
     #await con.execute("DROP TABLE IF EXISTS testdb")
 
     await con.execute("CREATE TABLE IF NOT EXISTS test_table (id SERIAL PRIMARY KEY, name TEXT, age INT)")
