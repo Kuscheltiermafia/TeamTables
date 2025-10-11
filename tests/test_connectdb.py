@@ -1,7 +1,8 @@
 import asyncpg
 import asyncio
-
 import pytest
+import os
+from dotenv import load_dotenv
 
 @pytest.mark.test_db
 def test_db():
@@ -12,6 +13,12 @@ async def db_connect():
     #await conDB.execute("CREATE DATABASE testdb")
 
     #await conDB.close()
+
+    if os.getenv('CI') is None:
+        load_dotenv('.env.test')
+
+    user = os.getenv('POSTGRES_USER')
+    password = os.getenv('POSTGRES_PASSWORD')
 
     con = await asyncpg.connect(host='localhost', port=5432, database='testdb')
     #await con.execute("DROP TABLE IF EXISTS testdb")
