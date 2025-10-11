@@ -66,7 +66,7 @@ async def setup_databases():
 
     #Insert data Database setup here
 
-    #Projekt Perms irgendwo hier speichern, idk wie genau ich das machen werd
+    #Projekt Perms irgendwo hier speichern, idk wie genau ich dies machen werd
 
 #Test Method
 if __name__ == '__main__':

@@ -1,6 +1,9 @@
 import asyncpg
 import asyncio
 
+import pytest
+
+@pytest.mark.test_db
 def test_db():
     asyncio.run(db_connect())
 
@@ -13,13 +16,13 @@ async def db_connect():
     con = await asyncpg.connect(host='localhost', port=5432, database='testdb')
     #await con.execute("DROP TABLE IF EXISTS testdb")
 
-    await con.execute("""CREATE TABLE IF NOT EXISTS testdb (id SERIAL PRIMARY KEY, name TEXT, age INT)""")
+    await con.execute("CREATE TABLE IF NOT EXISTS test_table (id SERIAL PRIMARY KEY, name TEXT, age INT)")
 
-    await con.execute("""INSERT INTO testdb (name, age) VALUES ('Alice', 22)""")
-    await con.execute("""INSERT INTO testdb (name, age) VALUES ('Bob', 72)""")
-    await con.execute("""INSERT INTO testdb (name, age) VALUES ('Deez', 69)""")
+    await con.execute("INSERT INTO test_table (name, age) VALUES ('Alice', 22)")
+    await con.execute("INSERT INTO test_table (name, age) VALUES ('Bob', 72)")
+    await con.execute("INSERT INTO test_table (name, age) VALUES ('Deez', 69)")
 
-    types = await con.fetch('SELECT * FROM testdb')
+    types = await con.fetch("SELECT * FROM test_table")
 
     print(types)
 
