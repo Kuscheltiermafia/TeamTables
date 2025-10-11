@@ -1,13 +1,9 @@
-from flask import *
-import requests
+from backend.data_management.pool_handler import init_data_pool
+from backend.user_management.pool_handler import init_user_pool
 
-app = Flask(__name__)
-
-README_URL = f"https://github.com/Kuscheltiermafia/TeamCard/blob/main/README.md"
-
-@app.route('/')
-def index():
-    return render_template("index.html")
+async def main():
+    await init_data_pool()
+    await init_user_pool()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    main()

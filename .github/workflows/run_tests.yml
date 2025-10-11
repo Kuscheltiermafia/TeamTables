@@ -37,9 +37,9 @@ jobs:
           pip install -r requirements.txt
       - name: Run tests
         env:
-          DB_HOST: localhost
-          DB_PORT: 5432
-          DB_USER: user
-          DB_PASSWORD: password
-          DB_NAME: test_db
+          TEST_DB_HOST: localhost
+          TEST_DB_PORT: 5432
+          TEST_DB_USER: user
+          TEST_DB_PASSWORD: password
+          TEST_DB_NAME: test_db
         run: pytest -m "test_db"
