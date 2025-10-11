@@ -31,6 +31,13 @@ async def db_connect():
 
     types = await con.fetch("SELECT * FROM test_table")
 
+    assert types[0]['name'] == 'Alice'
+    assert types[0]['age'] == 22
+    assert types[1]['name'] == 'Bob'
+    assert types[1]['age'] == 72
+    assert types[2]['name'] == 'Deez'
+    assert types[2]['age'] == 69
+
     print(types)
 
     await con.close()
