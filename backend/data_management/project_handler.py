@@ -6,7 +6,7 @@ import uuid
 async def create_project(project_name: str, owner_id: int, team_id: int):
     session_id = uuid.uuid4()
     async with data_pool.acquire() as connection:
-        await connection.execute("CREATE SCHEMA $1", session_id)
+        await connection.execute(f'CREATE SCHEMA "{session_id}"')
 
     async with user_pool.acquire() as connection:
         await connection.execute("INSERT INTO projects (project_id, project_name, owner_id, team_id) VALUES ($1, $2, $3, $4)", project_name, project_name, owner_id, team_id)
