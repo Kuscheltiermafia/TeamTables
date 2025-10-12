@@ -5,8 +5,9 @@ import os
 from dotenv import load_dotenv
 
 @pytest.mark.test_db
-def test_db():
-    asyncio.run(db_connect())
+@pytest.mark.asyncio
+async def test_projects():
+    await db_connect()
 
 async def db_connect():
 

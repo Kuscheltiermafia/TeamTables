@@ -7,8 +7,9 @@ import backend.user_management.pool_handler
 from backend.data_management.project_handler import create_project, get_project_name, get_team_projects
 
 @pytest.mark.data_db
-def test_projects():
-    asyncio.run(setup_project())
+@pytest.mark.asyncio
+async def test_projects():
+    await setup_project()
 
 async def setup_project():
 
