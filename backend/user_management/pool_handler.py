@@ -10,6 +10,8 @@ user_pool : asyncpg.Pool = None
 
 async def init_user_pool():
 
+    print("Initializing user database pool...")
+
     host = os.getenv('POSTGRES_HOST')
     port = os.getenv('POSTGRES_PORT')
     database = os.getenv('USER_DB_NAME')
@@ -26,6 +28,8 @@ async def init_user_pool():
             user=user,
             password=password,
         )
+
+    print("User database pool initialized.")
 
 async def close_user_pool():
     global user_pool

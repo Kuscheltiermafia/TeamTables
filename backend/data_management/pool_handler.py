@@ -10,6 +10,8 @@ data_pool : asyncpg.Pool = None
 
 async def init_data_pool():
 
+    print("Initializing data database pool...")
+
     host = os.getenv('POSTGRES_HOST')
     port = os.getenv('POSTGRES_PORT')
     database = os.getenv('DATA_DB_NAME')
@@ -26,6 +28,8 @@ async def init_data_pool():
             user=user,
             password=password,
         )
+
+    print("Data database pool initialized.")
 
 async def close_data_pool():
     global data_pool
