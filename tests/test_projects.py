@@ -4,8 +4,7 @@ import pytest
 
 import backend.data_management.pool_handler
 import backend.user_management.pool_handler
-import backend.data_management.project_handler
-from data_management.project_handler import create_project, get_project_name, get_team_projects
+from backend.data_management.project_handler import create_project, get_project_name, get_team_projects
 
 @pytest.mark.data_db
 def test_projects():

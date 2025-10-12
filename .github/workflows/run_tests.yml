@@ -94,7 +94,7 @@ jobs:
           POSTGRES_PASSWORD: data_password
         run: | 
           chmod +x backend/setup_databases.py
-          backend/setup_databases.py
+          python backend/setup_databases.py
 
       - name: Run tests
         env:
