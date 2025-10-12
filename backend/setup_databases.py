@@ -33,7 +33,7 @@ async def setup_databases():
         "SELECT 1 FROM pg_database WHERE datname = $1", data_db_name
     )
     if not exists:
-        await setup_db_conn.execute("CREATE DATABASE $1", data_db_name)
+        await setup_db_conn.execute('CREATE DATABASE "{data_db_name}"')
 
     #Close connection to the PostgreSQL server
     await setup_db_conn.close()
