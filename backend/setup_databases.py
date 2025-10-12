@@ -26,14 +26,14 @@ async def setup_databases():
         "SELECT 1 FROM pg_database WHERE datname = $1", user_db_name
     )
     if not exists:
-        await setup_db_conn.execute('CREATE DATABASE "{user_db_name}"')
+        await setup_db_conn.execute(f'CREATE DATABASE "{user_db_name}"')
 
     #Create 'data' database
     exists = await setup_db_conn.fetchval(
         "SELECT 1 FROM pg_database WHERE datname = $1", data_db_name
     )
     if not exists:
-        await setup_db_conn.execute('CREATE DATABASE "{data_db_name}"')
+        await setup_db_conn.execute(f'CREATE DATABASE "{data_db_name}"')
 
     #Close connection to the PostgreSQL server
     await setup_db_conn.close()
@@ -55,8 +55,8 @@ async def setup_databases():
 
     #Create 'teams' table
     await conn.execute("""CREATE TABLE IF NOT EXISTS teams (
-                                                               team_id SERIAL PRIMARY KEY,
-                                                               team_name VARCHAR(50) NOT NULL UNIQUE,
+        team_id SERIAL PRIMARY KEY,
+        team_name VARCHAR(50) NOT NULL UNIQUE,
         token TEXT)""")
 
     # Creating 'team_role'
@@ -72,7 +72,7 @@ async def setup_databases():
     # Create 'team_members' table
     #Etvl. Perms weiter ausarbeiten / ändern
     await conn.execute("""CREATE TABLE IF NOT EXISTS team_members(
-                                                                     user_id INT REFERENCES users (userID) ON DELETE CASCADE,
+        user_id INT REFERENCES users (userID) ON DELETE CASCADE,
         team_id INT REFERENCES teams (team_id) ON DELETE CASCADE,
         role team_role NOT NULL DEFAULT 'member',
         PRIMARY KEY (user_id, team_id)
@@ -80,7 +80,7 @@ async def setup_databases():
 
     #Create 'projects' table
     await conn.execute("""CREATE TABLE IF NOT EXISTS projects (
-                                                                  project_id VARCHAR(36) PRIMARY KEY,
+        project_id VARCHAR(36) PRIMARY KEY,
         project_name VARCHAR(50) NOT NULL,
         owner_id INT REFERENCES users (userID) ON DELETE SET NULL,
         team_id INT REFERENCES teams (team_id) ON DELETE SET NULL
