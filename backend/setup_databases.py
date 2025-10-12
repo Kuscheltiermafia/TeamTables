@@ -26,7 +26,7 @@ async def setup_databases():
         "SELECT 1 FROM pg_database WHERE datname = $1", user_db_name
     )
     if not exists:
-        await setup_db_conn.execute("CREATE DATABASE $1", user_db_name)
+        await setup_db_conn.execute('CREATE DATABASE "{user_db_name}"')
 
     #Create 'data' database
     exists = await setup_db_conn.fetchval(

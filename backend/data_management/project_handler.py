@@ -1,5 +1,5 @@
-from data_management.pool_handler import data_pool
-from user_management.pool_handler import user_pool
+from backend.data_management.pool_handler import data_pool
+from backend.user_management.pool_handler import user_pool
 import uuid
 
 
