@@ -51,7 +51,7 @@ jobs:
           TEST_DB_USER: user
           TEST_DB_PASSWORD: password
           TEST_DB_NAME: test_db
-        run: pytest -m "test_db"
+        run: PYTHONPATH=$(pwd) pytest -m "test_db"
 
   test-data-db:
 
@@ -92,7 +92,9 @@ jobs:
           POSTGRES_PORT: 5433
           POSTGRES_USER: data_user
           POSTGRES_PASSWORD: data_password
-        run: backend/setup_databases.py
+        run: | 
+          chmod +x backend/setup_databases.py
+          backend/setup_databases.py
 
       - name: Run tests
         env:
@@ -102,4 +104,4 @@ jobs:
           POSTGRES_PASSWORD: data_password
           DATA_DB_NAME: data
           USER_DB_NAME: users
-        run: pytest -m "data_db"
+        run: PYTHONPATH=$(pwd) pytest -m "data_db"
