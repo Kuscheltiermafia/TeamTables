@@ -5,6 +5,7 @@ import os
 if os.getenv('CI') is None:
     load_dotenv('.env.deployment')
 
+# noinspection PyTypeChecker
 user_pool : asyncpg.Pool = None
 
 async def init_user_pool():
@@ -17,14 +18,14 @@ async def init_user_pool():
 
     global user_pool
     if user_pool is None:
-        async with asyncpg.create_pool(
+        # noinspection PyUnresolvedReferences
+        user_pool = await asyncpg.create_pool(
             host=host,
             port=port,
             database=database,
             user=user,
             password=password,
-        ) as pool:
-            user_pool = pool
+        )
 
 async def close_user_pool():
     global user_pool
