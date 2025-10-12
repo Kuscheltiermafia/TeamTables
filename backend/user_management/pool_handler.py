@@ -9,11 +9,11 @@ user_pool : asyncpg.Pool = None
 
 async def init_user_pool():
 
-    host = os.getenv('USER_DB_HOST')
-    port = os.getenv('USER_DB_PORT')
+    host = os.getenv('POSTGRES_HOST')
+    port = os.getenv('POSTGRES_PORT')
     database = os.getenv('USER_DB_NAME')
-    user = os.getenv('USER_DB_USER')
-    password = os.getenv('USER_DB_PASSWORD')
+    user = os.getenv('POSTGRES_USER')
+    password = os.getenv('POSTGRES_PASSWORD')
 
     global user_pool
     if user_pool is None:

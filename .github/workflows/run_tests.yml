@@ -9,9 +9,13 @@ on:
       - main
 
 jobs:
+
   test-user-db:
+
     runs-on: ubuntu-latest
+
     services:
+
       postgres:
         image: postgres:18
         env:
@@ -25,16 +29,21 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+
     steps:
+
       - uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.13'
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
       - name: Run tests
         env:
           TEST_DB_HOST: localhost
@@ -43,3 +52,54 @@ jobs:
           TEST_DB_PASSWORD: password
           TEST_DB_NAME: test_db
         run: pytest -m "test_db"
+
+  test-data-db:
+
+    runs-on: ubuntu-latest
+
+    services:
+
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: data_user
+          POSTGRES_PASSWORD: data_password
+        ports:
+        - 5433:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Setup databases
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5433
+          POSTGRES_USER: data_user
+          POSTGRES_PASSWORD: data_password
+        run: backend/setup_databases.py
+
+      - name: Run tests
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5433
+          POSTGRES_USER: data_user
+          POSTGRES_PASSWORD: data_password
+          DATA_DB_NAME: data
+          USER_DB_NAME: users
+        run: pytest -m "data_db"
