@@ -60,14 +60,14 @@ async def setup_databases():
         token TEXT)""")
 
     # Creating 'team_role'
-    await conn.execute('''
+    await conn.execute("""
                     DO $$
                     BEGIN
                         IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'team_role') THEN
                             CREATE TYPE team_role AS ENUM ('admin', 'moderator', 'member');
                         END IF;
                     END$$;
-                ''')
+                """)
 
     # Create 'team_members' table
     #Etvl. Perms weiter ausarbeiten / ändern
