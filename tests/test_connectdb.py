@@ -21,23 +21,23 @@ async def db_connect():
     password = os.getenv('TEST_DB_PASSWORD')
 
     con = await asyncpg.connect(host=host, port=port, database=database, user=user, password=password)
-    #await con.execute("DROP TABLE IF EXISTS testdb")
+    #await con.execute('DROP TABLE IF EXISTS testdb')
 
-    await con.execute("CREATE TABLE IF NOT EXISTS test_table (id SERIAL PRIMARY KEY, name TEXT, age INT)")
+    await con.execute('CREATE TABLE IF NOT EXISTS test_table (id SERIAL PRIMARY KEY, name TEXT, age INT)')
 
-    await con.execute("INSERT INTO test_table (name, age) VALUES ('Alice', 22)")
-    await con.execute("INSERT INTO test_table (name, age) VALUES ('Bob', 72)")
-    await con.execute("INSERT INTO test_table (name, age) VALUES ('Deez', 69)")
+    await con.execute('INSERT INTO test_table (name, age) VALUES ($1, $2)', "Alice", 22)
+    await con.execute('INSERT INTO test_table (name, age) VALUES ($1, $2)', "Bob", 72)
+    await con.execute('INSERT INTO test_table (name, age) VALUES ($1, $2)', "Deez", 69)
 
-    types = await con.fetch("SELECT * FROM test_table")
+    types = await con.fetch('SELECT * FROM test_table')
 
     print(types)
 
-    assert types[0]['name'] == 'Alice'
+    assert types[0]['name'] == "Alice"
     assert types[0]['age'] == 22
-    assert types[1]['name'] == 'Bob'
+    assert types[1]['name'] == "Bob"
     assert types[1]['age'] == 72
-    assert types[2]['name'] == 'Deez'
+    assert types[2]['name'] == "Deez"
     assert types[2]['age'] == 69
 
     await con.close()
