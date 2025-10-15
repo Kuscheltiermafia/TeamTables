@@ -1,13 +1,23 @@
-from flask import *
-import requests
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
-app = Flask(__name__)
+app = FastAPI()
 
-README_URL = f"https://github.com/Kuscheltiermafia/TeamCard/blob/main/README.md"
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
-@app.route('/')
-def index():
-    return render_template("index.html")
 
-if __name__ == '__main__':
-    app.run(debug=True)
+templates = Jinja2Templates(directory="templates")
+
+@app.get("/")
+async def index(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="index.html"
+    )
+
+@app.get("/items/{id}", response_class=HTMLResponse)
+async def read_item(request: Request, id: str):
+    return templates.TemplateResponse(
+        request=request, name="item.html", context={"id": id}
+    )
