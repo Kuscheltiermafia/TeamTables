@@ -23,14 +23,14 @@ async def setup_databases():
 
     #Create 'users' database
     exists = await setup_db_conn.fetchval(
-        "SELECT 1 FROM pg_database WHERE datname = $1", user_db_name
+        'SELECT 1 FROM pg_database WHERE datname = $1', user_db_name
     )
     if not exists:
         await setup_db_conn.execute(f'CREATE DATABASE "{user_db_name}"')
 
     #Create 'data' database
     exists = await setup_db_conn.fetchval(
-        "SELECT 1 FROM pg_database WHERE datname = $1", data_db_name
+        'SELECT 1 FROM pg_database WHERE datname = $1', data_db_name
     )
     if not exists:
         await setup_db_conn.execute(f'CREATE DATABASE "{data_db_name}"')
@@ -44,20 +44,20 @@ async def setup_databases():
     conn = await asyncpg.connect(host=host, port=port, database=user_db_name, user=user, password=password)
 
     #Create 'users' table
-    await conn.execute("""CREATE TABLE IF NOT EXISTS users (
+    await conn.execute('''CREATE TABLE IF NOT EXISTS users (
         userID    SERIAL NOT NULL PRIMARY KEY,
         userName  VARCHAR(25) NOT NULL UNIQUE,
         email     VARCHAR(50) NOT NULL,
         password  VARCHAR(100) NOT NULL UNIQUE,
         lastName  VARCHAR(50),
         firstName VARCHAR(50)
-        )""")
+        )''')
 
     #Create 'teams' table
-    await conn.execute("""CREATE TABLE IF NOT EXISTS teams (
+    await conn.execute('''CREATE TABLE IF NOT EXISTS teams (
         team_id SERIAL PRIMARY KEY,
         team_name VARCHAR(50) NOT NULL UNIQUE,
-        token TEXT)""")
+        token TEXT)''')
 
     # Creating 'team_role'
     await conn.execute('''
@@ -71,20 +71,20 @@ async def setup_databases():
 
     # Create 'team_members' table
     #Etvl. Perms weiter ausarbeiten / ändern
-    await conn.execute("""CREATE TABLE IF NOT EXISTS team_members(
+    await conn.execute('''CREATE TABLE IF NOT EXISTS team_members(
         user_id INT REFERENCES users (userID) ON DELETE CASCADE,
         team_id INT REFERENCES teams (team_id) ON DELETE CASCADE,
         role team_role NOT NULL DEFAULT 'member',
         PRIMARY KEY (user_id, team_id)
-        )""")
+        )''')
 
     #Create 'projects' table
-    await conn.execute("""CREATE TABLE IF NOT EXISTS projects (
+    await conn.execute('''CREATE TABLE IF NOT EXISTS projects (
         project_id VARCHAR(36) PRIMARY KEY,
         project_name VARCHAR(50) NOT NULL,
         owner_id INT REFERENCES users (userID) ON DELETE SET NULL,
         team_id INT REFERENCES teams (team_id) ON DELETE SET NULL
-        )""")
+        )''')
 
     #Close the connection to the 'users' database
     await conn.close()
