@@ -107,3 +107,13 @@ jobs:
           DATA_DB_NAME: data
           USER_DB_NAME: users
         run: PYTHONPATH=$(pwd) pytest -m "data_db"
+
+      - name: Run user creation tests
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5433
+          POSTGRES_USER: data_user
+          POSTGRES_PASSWORD: data_password
+          DATA_DB_NAME: data
+          USER_DB_NAME: users
+        run: PYTHONPATH=$(pwd) pytest -m "user_creation"
