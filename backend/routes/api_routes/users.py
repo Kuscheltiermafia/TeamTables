@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Form
 from pydantic import BaseModel
 from dataclasses import dataclass
+from backend.user_management.user_handler import *
+
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -13,7 +15,7 @@ class User:
     password: str
 
 @router.post("/create_user")
-async def create_user(
+async def create_user_post(
     userName: str = Form(...),
     firstName: str = Form(...),
     lastName: str = Form(...),
@@ -21,4 +23,6 @@ async def create_user(
     password: str = Form(...)
 ):
     user = User(userName, firstName, lastName, email, password)
-    return {"created_user": user.__dict__}
+    usr_id = await create_user(userName, firstName, lastName, email, password)
+    print(usr_id)
+    return {"created_user": user.__dict__}#, "user Id" : usr_id}

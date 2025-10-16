@@ -2,5 +2,6 @@ venv/
 .idea/
 .vscode/
 g.*
+/.env.deployment
 /.env.test
 .venv/
