@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+  
   <title>TeamCards & MultiUser Table</title>
 </head>
 <body>
@@ -15,5 +16,35 @@
   <h2>MultiUser Table Program</h2>
   <p>This section will handle the multi-user functionality.</p>
 
+  <form action="/api/users/create_user" method="post" id="user-form">
+    <input type="text" name="userName" placeholder="userName">
+    <input type="text" name="firstName" placeholder="firstName">
+    <input type="text" name="lastName" placeholder="lastName">
+    <input type="email" name="email" placeholder="email">
+    <input type="password" name="password" placeholder="password">
+    <input type="submit">
+  </form>
+
 </body>
+<script>
+// const button = document.getElementById('post-btn');
+
+// button.addEventListener('click', async () => {
+//   try {
+//     const response = await fetch('api/users/create_user', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify({ name: 'lolo' })
+//     });
+
+//     const data = await response.json();
+//     console.log('Completed!', data);
+//   } catch (err) {
+//     console.error(`Error: ${err}`);
+//   }
+// });
+
+</script>
 </html>
