@@ -10,7 +10,7 @@ on:
 
 jobs:
 
-  test-user-db:
+  test-test-db:
 
     runs-on: ubuntu-latest
 
@@ -95,8 +95,8 @@ jobs:
           DATA_DB_NAME: data
           USER_DB_NAME: users
         run: | 
-          chmod +x backend/setup_databases.py
-          python backend/setup_databases.py
+          chmod +x setup_databases.py
+          python setup_databases.py
 
       - name: Run tests
         env:
@@ -111,7 +111,7 @@ jobs:
       - name: Run user creation tests
         env:
           POSTGRES_HOST: localhost
-          POSTGRES_PORT: 5433
+          POSTGRES_PORT: 5434
           POSTGRES_USER: data_user
           POSTGRES_PASSWORD: data_password
           DATA_DB_NAME: data
