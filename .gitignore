@@ -3,3 +3,4 @@ venv/
 .vscode/
 g.*
 /.env.test
+/.env.deployment

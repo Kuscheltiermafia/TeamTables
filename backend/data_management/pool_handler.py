@@ -20,14 +20,22 @@ async def init_data_pool():
 
     global data_pool
     if data_pool is None:
-        # noinspection PyUnresolvedReferences
-        data_pool = await asyncpg.create_pool(
-            host=host,
-            port=port,
-            database=database,
-            user=user,
-            password=password,
-        )
+        if os.getenv('CI') is None:
+            # noinspection PyUnresolvedReferences
+            data_pool = await asyncpg.create_pool(
+                host=host,
+                port=port,
+                database=database,
+            )
+        else:
+            # noinspection PyUnresolvedReferences
+            data_pool = await asyncpg.create_pool(
+                host=host,
+                port=port,
+                database=database,
+                user=user,
+                password=password,
+            )
 
     print("Data database pool initialized.")
 

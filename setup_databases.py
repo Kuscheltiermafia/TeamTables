@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 async def setup_databases():
     #Load environment variables from .env.deployment file if not in CI environment
     if os.getenv('CI') is None:
+        print("Loading environment variables from .env.deployment")
         load_dotenv('.env.deployment')
 
     host = os.getenv('POSTGRES_HOST')
@@ -18,21 +19,33 @@ async def setup_databases():
 
     user_db_name = os.getenv('USER_DB_NAME')
     data_db_name = os.getenv('DATA_DB_NAME')
+
+    print(f"Host: {host}, Port: {port}, User DB: {user_db_name}, Data DB: {data_db_name}")
+
     #Connect to the PostgreSQL server
-    setup_db_conn = await asyncpg.connect(host=host, port=port, user=user, password=password)
+    if os.getenv('CI') is None:
+        print("Connecting to PostgreSQL server without authentication")
+        setup_db_conn = await asyncpg.connect(host=host, port=port)
+    else:
+        print("Connecting to PostgreSQL server with authentication")
+        setup_db_conn = await asyncpg.connect(host=host, port=port, user=user, password=password)
 
     #Create 'users' database
     exists = await setup_db_conn.fetchval(
         'SELECT 1 FROM pg_database WHERE datname = $1', user_db_name
     )
+    print(f"Database '{user_db_name}' exists: {bool(exists)}")
     if not exists:
+        print(f"Creating database '{user_db_name}'")
         await setup_db_conn.execute(f'CREATE DATABASE "{user_db_name}"')
 
     #Create 'data' database
     exists = await setup_db_conn.fetchval(
         'SELECT 1 FROM pg_database WHERE datname = $1', data_db_name
     )
+    print(f"Database '{data_db_name}' exists: {bool(exists)}")
     if not exists:
+        print(f"Creating database '{data_db_name}'")
         await setup_db_conn.execute(f'CREATE DATABASE "{data_db_name}"')
 
     #Close connection to the PostgreSQL server
@@ -41,7 +54,12 @@ async def setup_databases():
     await asyncio.sleep(1)  #Wait a moment to ensure the database is created before connecting
 
     #Connect to the 'users' database
-    conn = await asyncpg.connect(host=host, port=port, database=user_db_name, user=user, password=password)
+    if os.getenv('CI') is None:
+        print("Connecting to 'users' database without authentication")
+        conn = await asyncpg.connect(host=host, port=port, database=user_db_name)
+    else:
+        print("Connecting to 'users' database with authentication")
+        conn = await asyncpg.connect(host=host, port=port, database=user_db_name, user=user, password=password)
 
     #Create 'users' table
     await conn.execute('''CREATE TABLE IF NOT EXISTS users (
