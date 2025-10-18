@@ -70,12 +70,14 @@ async def setup_databases():
         lastName  VARCHAR(50),
         firstName VARCHAR(50)
         )''')
+    print("Created 'users' table in 'users' database")
 
     #Create 'teams' table
     await conn.execute('''CREATE TABLE IF NOT EXISTS teams (
         team_id SERIAL PRIMARY KEY,
         team_name VARCHAR(50) NOT NULL UNIQUE,
         token TEXT)''')
+    print("Created 'teams' table in 'users' database")
 
     # Creating 'team_role'
     await conn.execute('''

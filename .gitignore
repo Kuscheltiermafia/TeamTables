@@ -5,3 +5,19 @@ g.*
 /.env.deployment
 /.env.test
 .venv/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+
+# Testing
+.pytest_cache/
+.coverage
+.tox/
+htmlcov/

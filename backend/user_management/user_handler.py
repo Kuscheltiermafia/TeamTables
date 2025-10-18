@@ -1,7 +1,7 @@
 import asyncpg
 import asyncio
 import bcrypt
-from backend.user_management.pool_handler import get_user_pool
+from backend.user_management.pool_handler import user_pool
 
 # help functions
 
@@ -11,10 +11,9 @@ def verify_password(plain_password, hashed_password):
 def hash_password(password: str) -> str:
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
-# asny functions
+# async functions
 
-async def create_user(userName: str, email: str, password: str, lastName: str, firstName: str):
-    user_pool = get_user_pool()
+async def create_user(userName: str, email: str, password: str, lastName: str, firstName: str) -> int:
     
     async with user_pool.acquire() as conn:
         
@@ -34,8 +33,6 @@ async def create_user(userName: str, email: str, password: str, lastName: str, f
         return user_id
 
 async def valid_password(userKey: str, password: str) -> bool:
-    
-    user_pool = get_user_pool()
     
     async with user_pool.acquire() as conn:
         if userKey is None or password is None:
