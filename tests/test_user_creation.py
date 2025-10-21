@@ -13,5 +13,12 @@ async def setup_user():
 
     from backend.user_management.user_handler import create_user
 
-    user_id = await create_user(userName="testuser", email="test.test@test.test", password="Test1234!", lastName="Test", firstName="User")
+    user_id = await create_user(
+        userName="testuser",
+        email="test.test@test.test",
+        password="Test1234!",
+        lastName="Test",
+        firstName="User"
+    )
+
     assert user_id is not None

@@ -20,14 +20,14 @@ async def create_user(userName: str, email: str, password: str, lastName: str, f
         if not all([userName, email, password]):
             raise ValueError("Username, email, and password cannot be empty.")
 
-        existing_user = await conn.fetchrow('SELECT * FROM users WHERE userName = $1 OR email = $2', userName, email)
+        existing_user = await conn.fetchrow('SELECT * FROM users WHERE username = $1 OR email = $2', userName, email)
         if existing_user:
             raise ValueError("Username or email already exists.")
 
         hashed_pw = hash_password(password)
 
         user_id = await conn.fetchval(
-            'INSERT INTO users (userName, email, password, lastName, firstName) VALUES ($1, $2, $3, $4, $5) RETURNING userID',
+            'INSERT INTO users (username, email, password, lastname, firstname) VALUES ($1, $2, $3, $4, $5) RETURNING userid',
             userName, email, hashed_pw, lastName, firstName
         )
         return user_id
@@ -41,7 +41,7 @@ async def valid_password(userKey: str, password: str) -> bool:
         if "@" in userKey:
             user = await conn.fetchrow('SELECT * FROM users WHERE email = $1', userKey)
         else:
-            user = await conn.fetchrow('SELECT * FROM users WHERE userName = $1', userKey)
+            user = await conn.fetchrow('SELECT * FROM users WHERE username = $1', userKey)
 
         if user and verify_password(password, user['password']):
             return True
