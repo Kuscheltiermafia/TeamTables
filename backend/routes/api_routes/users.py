@@ -25,4 +25,4 @@ async def create_user_post(
     user = User(userName, firstName, lastName, email, password)
     usr_id = await create_user(userName, firstName, lastName, email, password)
     print(usr_id)
-    return {"created_user": user.__dict__}#, "user Id" : usr_id}
+    return {"created_user": user.__dict__}

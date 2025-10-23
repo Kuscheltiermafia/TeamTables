@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
   <meta charset="UTF-8">
-  <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+  <link rel="stylesheet" 
+      href="{{ url_for('static', path='/styles.css') }}?v={{ cache_buster }}">
+  <link rel="shortcut icon" href="{{ url_for('static', path='/favicon.ico') }}?v={{ cache_buster }}" type="image/x-icon">
   
   <title>TeamCards & MultiUser Table</title>
 </head>
@@ -17,13 +19,14 @@
   <p>This section will handle the multi-user functionality.</p>
 
   <form action="/api/users/create_user" method="post" id="user-form">
-    <input type="text" name="userName" placeholder="userName">
-    <input type="text" name="firstName" placeholder="firstName">
-    <input type="text" name="lastName" placeholder="lastName">
-    <input type="email" name="email" placeholder="email">
-    <input type="password" name="password" placeholder="password">
-    <input type="submit">
+    <input type="text" name="userName" placeholder="userName"> <br> <br>
+    <input type="text" name="firstName" placeholder="firstName"> <br> <br>
+    <input type="text" name="lastName" placeholder="lastName"> <br> <br>
+    <input type="email" name="email" placeholder="email"> <br> <br>
+    <input type="password" name="password" placeholder="password"> <br> <br>
+    <input class="btn" type="submit">
   </form>
+
 
 </body>
 <script>
