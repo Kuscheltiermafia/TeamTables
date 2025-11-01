@@ -92,7 +92,7 @@ async def setup_databases():
     # Create 'team_members' table
     #Etvl. Perms weiter ausarbeiten / ändern
     await conn.execute('''CREATE TABLE IF NOT EXISTS team_members(
-        user_id INT REFERENCES users ("userid") ON DELETE CASCADE,
+        user_id INT REFERENCES users ("user_id") ON DELETE CASCADE,
         team_id INT REFERENCES teams (team_id) ON DELETE CASCADE,
         role team_role NOT NULL DEFAULT 'member',
         PRIMARY KEY (user_id, team_id)
@@ -102,7 +102,7 @@ async def setup_databases():
     await conn.execute('''CREATE TABLE IF NOT EXISTS projects (
         project_id VARCHAR(36) PRIMARY KEY,
         project_name VARCHAR(50) NOT NULL,
-        owner_id INT REFERENCES users ("userID") ON DELETE SET NULL,
+        owner_id INT REFERENCES users ("user_id") ON DELETE SET NULL,
         team_id INT REFERENCES teams (team_id) ON DELETE SET NULL
         )''')
 
