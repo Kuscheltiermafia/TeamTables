@@ -12,6 +12,7 @@ async def data_db_pool():
     if os.getenv('CI') is None:
         load_dotenv('.env.deployment')
 
+    # noinspection PyUnresolvedReferences
     pool = await asyncpg.create_pool(
         user=os.getenv('POSTGRES_USER'),
         password=os.getenv('POSTGRES_PASSWORD'),
@@ -41,6 +42,7 @@ async def user_db_pool():
     if os.getenv('CI') is None:
         load_dotenv('.env.deployment')
 
+    # noinspection PyUnresolvedReferences
     pool = await asyncpg.create_pool(
         user=os.getenv('POSTGRES_USER'),
         password=os.getenv('POSTGRES_PASSWORD'),

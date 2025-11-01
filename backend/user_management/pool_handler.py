@@ -19,24 +19,14 @@ async def init_user_pool():
     password = os.getenv('POSTGRES_PASSWORD')
 
     global user_pool
-    if user_pool is None:
-
-        if os.getenv('CI') is None:
-            # noinspection PyUnresolvedReferences
-            user_pool = await asyncpg.create_pool(
-                host=host,
-                port=port,
-                database=database,
-            )
-        else:
-        # noinspection PyUnresolvedReferences
-            user_pool = await asyncpg.create_pool(
-                host=host,
-                port=port,
-                database=database,
-                user=user,
-                password=password,
-            )
+    # noinspection PyUnresolvedReferences
+    user_pool = await asyncpg.create_pool(
+        host=host,
+        port=port,
+        database=database,
+        user=user,
+        password=password,
+    )
 
     print("User database pool initialized.")
 

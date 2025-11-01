@@ -1,9 +1,5 @@
-import asyncpg
-import asyncio
 import bcrypt
 from asyncpg import Connection
-
-from backend.user_management.pool_handler import user_pool
 
 # help functions
 
