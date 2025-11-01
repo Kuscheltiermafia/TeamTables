@@ -27,8 +27,12 @@ async def data_db_pool():
 @pytest_asyncio.fixture
 async def data_db_transaction(data_db_pool):
     async with data_db_pool.acquire() as connection:
-        async with connection.transaction():
+        transaction = connection.transaction()
+        await transaction.start()
+        try:
             yield connection
+        finally:
+            await transaction.rollback()
 
 
 
@@ -52,5 +56,9 @@ async def user_db_pool():
 @pytest_asyncio.fixture
 async def user_db_transaction(user_db_pool):
     async with user_db_pool.acquire() as connection:
-        async with connection.transaction():
+        transaction = connection.transaction()
+        await transaction.start()
+        try:
             yield connection
+        finally:
+            await transaction.rollback()
