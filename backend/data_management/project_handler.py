@@ -3,12 +3,11 @@ import uuid
 
 
 async def create_project(connection:Connection, project_name: str, owner_id: int, team_id: int):
-    session_id = uuid.uuid4()
+    project_id = str(uuid.uuid4())
 
-    await connection.execute(f'CREATE SCHEMA "{session_id}"')
-
-
-    await connection.execute('INSERT INTO projects (project_id, project_name, owner_id, team_id) VALUES ($1, $2, $3, $4)', project_name, project_name, owner_id, team_id)
+    await connection.execute(f'CREATE SCHEMA "{project_id}"')
+    await connection.execute('INSERT INTO projects (project_id, project_name, owner_id, team_id) VALUES ($1, $2, $3, $4)', project_id, project_name, owner_id, team_id)
+    return str(project_id)
 
 
 async def get_project_name(connection:Connection, project_id: str) -> str | None:
