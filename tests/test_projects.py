@@ -1,7 +1,7 @@
 import pytest
 
 from conftest import user_db_transaction
-from user_management.team_handler import create_team
+from backend.user_management.team_handler import create_team
 from backend.data_management.project_handler import create_project, get_project_name, get_team_projects
 from backend.user_management.user_handler import create_user
 
