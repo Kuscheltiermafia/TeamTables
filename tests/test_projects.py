@@ -12,7 +12,6 @@ async def test_setup_project(user_db_transaction, data_db_transaction):
 
     project_name = "Test Project"
 
-
     user_id = await create_user(
         user_connection=user_db_transaction,
         userName="project_tester",

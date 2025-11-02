@@ -67,3 +67,10 @@ async def add_user_to_team(user_connection:Connection, user_id: int, team_id: in
         'INSERT INTO team_members (user_id, team_id, role) VALUES ($1, $2, $3)',
         user_id, team_id, role
     )
+
+async def remove_user_from_team(user_connection:Connection, user_id: int, team_id: int):
+    await user_connection.execute(
+        'DELETE FROM team_members WHERE user_id = $1 AND team_id = $2',
+        user_id, team_id
+    )
+

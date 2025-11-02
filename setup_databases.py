@@ -68,8 +68,8 @@ async def setup_databases():
     #Create 'teams' table
     await conn.execute('''CREATE TABLE IF NOT EXISTS teams (
         team_id SERIAL PRIMARY KEY,
-        team_name VARCHAR(50) NOT NULL UNIQUE,
-        token TEXT)''')
+        team_name VARCHAR(50) NOT NULL UNIQUE
+        )''')
     print("Created 'teams' table in 'users' database")
 
     # Creating 'team_role'
@@ -81,28 +81,44 @@ async def setup_databases():
                         END IF;
                     END$$;
                 ''')
+    print("Created 'team_role' enum type in 'users' database")
 
     # Create 'team_members' table
     #Etvl. Perms weiter ausarbeiten / ändern
     await conn.execute('''CREATE TABLE IF NOT EXISTS team_members(
         user_id INT REFERENCES users ("user_id") ON DELETE CASCADE,
-        team_id INT REFERENCES teams (team_id) ON DELETE CASCADE,
+        team_id INT REFERENCES teams ("team_id") ON DELETE CASCADE,
         role team_role NOT NULL DEFAULT 'member',
         PRIMARY KEY (user_id, team_id)
         )''')
+    print("Created 'team_members' table in 'users' database")
 
     #Create 'projects' table
     await conn.execute('''CREATE TABLE IF NOT EXISTS projects (
         project_id VARCHAR(36) PRIMARY KEY,
         project_name VARCHAR(50) NOT NULL,
-        owner_id INT REFERENCES users ("user_id") ON DELETE SET NULL,
-        team_id INT REFERENCES teams (team_id) ON DELETE SET NULL
+        owner_id INT REFERENCES users ("user_id") ON DELETE SET NULL
         )''')
+    print("Created 'projects' table in 'users' database")
+
+    #Create 'project_members' table
+    await conn.execute('''CREATE TABLE IF NOT EXISTS project_members (
+        user_id INT REFERENCES users ("user_id") ON DELETE CASCADE,
+        project_id VARCHAR(36) REFERENCES projects ("project_id") ON DELETE CASCADE,
+        permission json
+        )''')
+    print("Created 'project_members' table in 'users' database")
+
+    #Create 'project_teams' table
+    await conn.execute('''CREATE TABLE IF NOT EXISTS project_teams (
+        team_id INT REFERENCES teams ("team_id") ON DELETE CASCADE,
+        project_id VARCHAR(36) REFERENCES projects ("project_id") ON DELETE CASCADE,
+        permission json
+        )''')
+    print("Created 'project_teams' table in 'users' database")
 
     #Close the connection to the 'users' database
     await conn.close()
-
-    #Projekt Perms irgendwo hier speichern, idk wie genau ich dies machen werd
 
 if __name__ == '__main__':
     asyncio.run(setup_databases())
