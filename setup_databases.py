@@ -23,12 +23,8 @@ async def setup_databases():
     print(f"Host: {host}, Port: {port}, User DB: {user_db_name}, Data DB: {data_db_name}")
 
     #Connect to the PostgreSQL server
-    if os.getenv('CI') is None:
-        print("Connecting to PostgreSQL server without authentication")
-        setup_db_conn = await asyncpg.connect(host=host, port=port)
-    else:
-        print("Connecting to PostgreSQL server with authentication")
-        setup_db_conn = await asyncpg.connect(host=host, port=port, user=user, password=password)
+    print("Connecting to PostgreSQL server with authentication")
+    setup_db_conn = await asyncpg.connect(host=host, port=port, user=user, password=password)
 
     #Create 'users' database
     exists = await setup_db_conn.fetchval(
@@ -54,12 +50,9 @@ async def setup_databases():
     await asyncio.sleep(1)  #Wait a moment to ensure the database is created before connecting
 
     #Connect to the 'users' database
-    if os.getenv('CI') is None:
-        print("Connecting to 'users' database without authentication")
-        conn = await asyncpg.connect(host=host, port=port, database=user_db_name)
-    else:
-        print("Connecting to 'users' database with authentication")
-        conn = await asyncpg.connect(host=host, port=port, database=user_db_name, user=user, password=password)
+
+    print("Connecting to 'users' database with authentication")
+    conn = await asyncpg.connect(host=host, port=port, database=user_db_name, user=user, password=password)
 
     #Create 'users' table
     await conn.execute('''CREATE TABLE IF NOT EXISTS users (
@@ -84,10 +77,18 @@ async def setup_databases():
                     DO $$
                     BEGIN
                         IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'team_role') THEN
-                            CREATE TYPE team_role AS ENUM ('admin', 'moderator', 'member');
+                            CREATE TYPE team_role AS ENUM ('member', 'moderator', 'admin');
                         END IF;
                     END$$;
                 ''')
+
+    #Create 'team_role' table
+    await conn.execute('''CREATE TABLE IF NOT EXISTS user_teams (
+        user_id INT REFERENCES users ("user_id") ON DELETE CASCADE,
+        team_id INT REFERENCES teams (team_id) ON DELETE CASCADE,
+        role team_role NOT NULL DEFAULT 'member',
+        PRIMARY KEY (user_id, team_id)
+        )''')
 
     # Create 'team_members' table
     #Etvl. Perms weiter ausarbeiten / ändern
@@ -109,10 +110,7 @@ async def setup_databases():
     #Close the connection to the 'users' database
     await conn.close()
 
-    #Insert data Database setup here
-
     #Projekt Perms irgendwo hier speichern, idk wie genau ich dies machen werd
 
-#Test Method
 if __name__ == '__main__':
     asyncio.run(setup_databases())

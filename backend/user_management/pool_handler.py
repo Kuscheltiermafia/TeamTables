@@ -2,9 +2,6 @@ import asyncpg
 from dotenv import load_dotenv
 import os
 
-if os.getenv('CI') is None:
-    load_dotenv('.env.deployment')
-
 # noinspection PyTypeChecker
 user_pool : asyncpg.Pool = None
 
@@ -12,6 +9,7 @@ async def init_user_pool():
 
     print("Initializing user database pool...")
 
+    load_dotenv('.env.deployment')
     host = os.getenv('POSTGRES_HOST')
     port = os.getenv('POSTGRES_PORT')
     database = os.getenv('USER_DB_NAME')

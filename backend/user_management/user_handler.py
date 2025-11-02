@@ -41,3 +41,29 @@ async def valid_password(connection:Connection, userKey: str, password: str) -> 
     if user and verify_password(password, user['password']):
         return True
     return False
+
+async def get_user_by_id(connection:Connection, user_id: int):
+    user = await connection.fetchrow(
+        'SELECT * FROM users WHERE user_id = $1',
+        user_id
+    )
+    return user
+
+async def get_user_by_username(connection:Connection, username: str):
+    user = await connection.fetchrow(
+        'SELECT * FROM users WHERE username = $1',
+        username
+    )
+    return user
+
+async def delete_user(connection:Connection, user_id: int):
+    await connection.execute(
+        'DELETE FROM users WHERE user_id = $1',
+        user_id
+    )
+
+async def add_user_to_team(connection:Connection, user_id: int, team_id: int, role: str):
+    await connection.execute(
+        'INSERT INTO user_teams (user_id, team_id, role) VALUES ($1, $2, $3)',
+        user_id, team_id, role
+    )
