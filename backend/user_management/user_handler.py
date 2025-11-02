@@ -11,59 +11,59 @@ def hash_password(password: str) -> str:
 
 # async functions
 
-async def create_user(connection:Connection,  userName: str, email: str, password: str, lastName: str, firstName: str) -> int:
+async def create_user(user_connection:Connection,  userName: str, email: str, password: str, lastName: str, firstName: str) -> int:
         
     if not all([userName, email, password]):
         raise ValueError("Username, email, and password cannot be empty.")
 
-    existing_user = await connection.fetchrow('SELECT * FROM users WHERE userName = $1 OR email = $2', userName, email)
+    existing_user = await user_connection.fetchrow('SELECT * FROM users WHERE userName = $1 OR email = $2', userName, email)
     if existing_user:
         raise ValueError("Username or email already exists.")
 
     hashed_pw = hash_password(password)
 
-    user_id = await connection.fetchval(
+    user_id = await user_connection.fetchval(
         'INSERT INTO users (userName, email, password, lastName, firstName) VALUES ($1, $2, $3, $4, $5) RETURNING user_id',
         userName, email, hashed_pw, lastName, firstName
     )
     return user_id
 
-async def valid_password(connection:Connection, userKey: str, password: str) -> bool:
+async def valid_password(user_connection:Connection, userKey: str, password: str) -> bool:
 
     if userKey is None or password is None:
         return False
 
     if "@" in userKey:
-        user = await connection.fetchrow('SELECT * FROM users WHERE email = $1', userKey)
+        user = await user_connection.fetchrow('SELECT * FROM users WHERE email = $1', userKey)
     else:
-        user = await connection.fetchrow('SELECT * FROM users WHERE userName = $1', userKey)
+        user = await user_connection.fetchrow('SELECT * FROM users WHERE userName = $1', userKey)
 
     if user and verify_password(password, user['password']):
         return True
     return False
 
-async def get_user_by_id(connection:Connection, user_id: int):
-    user = await connection.fetchrow(
+async def get_user_by_id(user_connection:Connection, user_id: int):
+    user = await user_connection.fetchrow(
         'SELECT * FROM users WHERE user_id = $1',
         user_id
     )
     return user
 
-async def get_user_by_username(connection:Connection, username: str):
-    user = await connection.fetchrow(
+async def get_user_by_username(user_connection:Connection, username: str):
+    user = await user_connection.fetchrow(
         'SELECT * FROM users WHERE username = $1',
         username
     )
     return user
 
-async def delete_user(connection:Connection, user_id: int):
-    await connection.execute(
+async def delete_user(user_connection:Connection, user_id: int):
+    await user_connection.execute(
         'DELETE FROM users WHERE user_id = $1',
         user_id
     )
 
-async def add_user_to_team(connection:Connection, user_id: int, team_id: int, role: str):
-    await connection.execute(
-        'INSERT INTO user_teams (user_id, team_id, role) VALUES ($1, $2, $3)',
+async def add_user_to_team(user_connection:Connection, user_id: int, team_id: int, role: str):
+    await user_connection.execute(
+        'INSERT INTO team_members (user_id, team_id, role) VALUES ($1, $2, $3)',
         user_id, team_id, role
     )

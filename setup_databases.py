@@ -82,14 +82,6 @@ async def setup_databases():
                     END$$;
                 ''')
 
-    #Create 'team_role' table
-    await conn.execute('''CREATE TABLE IF NOT EXISTS user_teams (
-        user_id INT REFERENCES users ("user_id") ON DELETE CASCADE,
-        team_id INT REFERENCES teams (team_id) ON DELETE CASCADE,
-        role team_role NOT NULL DEFAULT 'member',
-        PRIMARY KEY (user_id, team_id)
-        )''')
-
     # Create 'team_members' table
     #Etvl. Perms weiter ausarbeiten / ändern
     await conn.execute('''CREATE TABLE IF NOT EXISTS team_members(

@@ -6,5 +6,5 @@ from backend.user_management.user_handler import create_user
 async def test_setup_user(user_db_transaction):
 
 
-    user_id = await create_user(connection=user_db_transaction, userName="testuser", email="test.test@test.test", password="Test1234!", lastName="Test", firstName="User")
+    user_id = await create_user(user_connection=user_db_transaction, userName="testuser", email="test.test@test.test", password="Test1234!", lastName="Test", firstName="User")
     assert user_id is not None
