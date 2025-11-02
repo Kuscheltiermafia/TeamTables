@@ -23,7 +23,7 @@ async def create_user(connection:Connection,  userName: str, email: str, passwor
     hashed_pw = hash_password(password)
 
     user_id = await connection.fetchval(
-        'INSERT INTO users (userName, email, password, lastName, firstName) VALUES ($1, $2, $3, $4, $5) RETURNING userID',
+        'INSERT INTO users (userName, email, password, lastName, firstName) VALUES ($1, $2, $3, $4, $5) RETURNING user_id',
         userName, email, hashed_pw, lastName, firstName
     )
     return user_id
